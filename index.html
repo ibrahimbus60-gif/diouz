@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Diouz – Chargement…</title>
-<style>body{font-family:system-ui;display:grid;place-items:center;min-height:100vh;margin:0;background:#0f172a;color:#fff}
-.l{font-weight:800;font-size:1.4rem}.s{opacity:.7;margin-top:8px}</style></head>
-<body><div><div class="l">Diouz</div><div class="s" id="s">Chargement…</div></div>
+<title>Diouz</title>
+<style>body{font-family:system-ui;display:grid;place-items:center;min-height:100vh;margin:0;background:#0f172a;color:#fff}.l{font-weight:800}</style>
+</head><body><div class="l" id="s">Diouz…</div>
 <script>
+const B64="H4sIADR11WoC/+29a3MbyZUg+l2/IrvaNgCxAAIg+AIF9qUoSqINtWRRLc+EWu7IqkoA1ayX6gESTfFG257xdO+HvTPdjtnYiYn1xM7OuDm+j7iOmd2IndjYiOadTxvh+Q3DX+CfcM/JrCpUAVUokOpukaLCbgqoysfJ835kJm69c+fh9pM/frRDBr5pbN64hf8Qg1r9jtRzJXzAqAb/mMynRB1Q12N+Rwr8XnVNih5b1GQdaaizA8d2fYmotuUzC5od6Jo/6GhsqKusyr/IRLd0X6dG1VOpwToNmUT9qj3d76j2kLkyMemhbgZm2Gh5YiZ/wExWVW3DdhOTvVvvNVabdKItdRyDVU1b0eGfA6ZU4UFVpQ5VDJboPGLePB09n/qBV1WoCx9HqREUg6r7Vd+llmcEKjyaGE9jnurqjq/bVqLXHd0OPiFnn35Jtu3A9cgT5pq6BYsme6cn1ulJnxo18sQOfOYRA/4zqa+ffuUyTyaPXLtHdrdkgkDBd9U2zcCigX96IpOerg6g+aM7d2sIh6/7BtscT7blOC6zNJcRGnwME2ulQaDLxD09CTxPd4nGTKpbtxZFvxu3+GI3265t+0ekWlX67Xd79V6rRzeqgExXg6+9Hnz2D9shGeCLGbTfXWmtttYU+ELV9rvN5ZUlJr402++yNRiCbeBw0J818Tu8cxl809TmSnMFvtn77XcbdWV9rQFfDuiQwfiMLrN1/hWH1JZWsCGwpgFte4rSa7ZwUCdwgYDtd1fVJco0aOHRHqv6bWYNy/wjdRmt6hbwc9W3HbnuHFaiVkpmK8X2fdsUDckx+d9Mpum0DIjsMdcT7AgMi7zZ1qi7XzkiAmECX3UKiFFjfDWaDdpkIcp6jd5ybz1E2XqLLilrIcpW6nSZY5mjDLqstlobAmPN1lKdf+EY662tNlYbxwDXzSPFPqx6+ie61W8rtqsxF0A/3EAm3tdhsdSpDvT+wID/fAF2m7OtA2u1/GOuCY6AWW3DqCpsQIc6tPBMWMrgmCi2NjoyqdvXrXZ9QwGe77t2YGntIXXLuNLKhhhSfPcBVz1g9mqPmroxansjz2dmFZitKgRMPJClPda3GflgV5If24BoW/YAoqrHXL23YegWqw4Ywttu1JaXNxyqabA6pFvgc8Q36vwWdM9x6CjtmLY6v4E8tcycf8JKAeNHbYbEQSDxlg8OOeDJLK2alDTKTdqjWUXuL1Vaw4PZGBl+BLKx4FA6Fq9vmEwH1cHiFARrmqt3mTmPFPXvECJJl8BgtdJfcPGUfxRu7beTIDTWKotFy4HrNxRJHX1NC459ZrLQLrwv1qzMoHb9XXoMsmZIUaRrDm8PAEA0Y/SNIkBSnPZpDiu17k0AslloQO4fahkAsm5ToDBWYfUlj2YHW131bUPYgB6BjvcwD/VA5c6bfyz0YcPa2M55QtrFi4sGpoAja2jmXhttCp8nZprO+AhGcAZgInALa+gGYp4dxk1VXNKFPnyElRvRl9Dblut1xHN9uHRlCJHKxVhq92A4UEJ6BoJtbw2iUgubLH2XJnWXAK4hF7iynUtUksN1AJyqynX6i3USgZVjhKAN6YBnxSTWn0dpMRnh75wwkCfme3AcZirUo+ljJIZVMZ6HzSk0PDqQHe8eYgdtuXwtVfqdWEodAtkUPfHSECkcUxM0mQ9fobWLAu12cSYtKsqOIzwINSGG+A3Rkay1UqzNagdL4S6ZlvTxKZqTM/kJPg4ZasmydfKsCpLSD4fjEYalYi7l";
 async function go(){
-  const s=document.getElementById("s");
   try{
-    const parts=await Promise.all([0,1,2].map(i=>fetch("p"+i+".txt").then(r=>r.text())));
-    s.textContent="Ouverture…";
-    document.open();document.write(parts.join(""));document.close();
-  }catch(e){s.textContent="Erreur de chargement. Réessaie."}
+    const bin=Uint8Array.from(atob(B64),c=>c.charCodeAt(0));
+    const ds=new DecompressionStream("gzip");
+    const stream=new Blob([bin]).stream().pipeThrough(ds);
+    const html=await new Response(stream).text();
+    document.open();document.write(html);document.close();
+  }catch(e){
+    document.getElementById("s").textContent="Erreur — ouvre index-full.html en local";
+    console.error(e);
+  }
 }
 go();
 </script></body></html>
