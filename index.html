@@ -6,11 +6,12 @@
 <script>
 (async function(){
   const s=document.getElementById("s");
+  const files=["c0a", "c0b", "c1a", "c1b", "c2a", "c2b", "c3a", "c3b", "b4"];
   try{
-    for(let i=0;i<5;i++){
+    for(const f of files){
       await new Promise((res,rej)=>{
         const sc=document.createElement("script");
-        sc.src="b"+i+".js";
+        sc.src=f+".js";
         sc.onload=res;sc.onerror=rej;
         document.head.appendChild(sc);
       });
