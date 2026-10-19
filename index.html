@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Diouz – Chargement</title>
-<style>body{font-family:system-ui;display:grid;place-items:center;min-height:100vh;margin:0;background:#0f172a;color:#fff}.l{font-weight:800;font-size:1.4rem}.s{opacity:.7;margin-top:10px;max-width:320px;text-align:center;line-height:1.4}a{color:#60a5fa}</style></head>
-<body><div style="text-align:center">
-<div class="l">Diouz</div>
-<p class="s">Apprendre aujourd'hui, réussir demain</p>
-<p class="s">La version en ligne complète se finalise. En attendant, ouvre le fichier <strong>index-full.html</strong> fourni avec le projet (iPhone / Android / ordinateur) — toutes les matières, Prof IA, stats, communauté et fiches y sont.</p>
-<p class="s"><a href="https://github.com/ibrahimbus60-gif/diouz">Code source GitHub</a></p>
-</div></body></html>
+<title>Diouz</title>
+<style>body{font-family:system-ui;display:grid;place-items:center;min-height:100vh;margin:0;background:#0f172a;color:#fff}.l{font-weight:800}</style>
+</head><body><div class="l" id="s">Diouz…</div>
+<script>
+(async function(){
+  const s=document.getElementById("s");
+  try{
+    for(let i=0;i<5;i++){
+      await new Promise((res,rej)=>{
+        const sc=document.createElement("script");
+        sc.src="b"+i+".js";
+        sc.onload=res;sc.onerror=rej;
+        document.head.appendChild(sc);
+      });
+    }
+    const B64=window.__B.join("");
+    const bin=Uint8Array.from(atob(B64),c=>c.charCodeAt(0));
+    const ds=new DecompressionStream("gzip");
+    const stream=new Blob([bin]).stream().pipeThrough(ds);
+    const html=await new Response(stream).text();
+    document.open();document.write(html);document.close();
+  }catch(e){
+    s.textContent="Erreur de chargement";
+    console.error(e);
+  }
+})();
+</script></body></html>
