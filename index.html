@@ -1,1 +1,17 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diouz – Chargement…</title>
+<style>body{font-family:system-ui;display:grid;place-items:center;min-height:100vh;margin:0;background:#0f172a;color:#fff}
+.l{font-weight:800;font-size:1.4rem}.s{opacity:.7;margin-top:8px}</style></head>
+<body><div><div class="l">Diouz</div><div class="s" id="s">Chargement…</div></div>
+<script>
+async function go(){
+  const s=document.getElementById("s");
+  try{
+    const parts=await Promise.all([0,1,2].map(i=>fetch("p"+i+".txt").then(r=>r.text())));
+    s.textContent="Ouverture…";
+    document.open();document.write(parts.join(""));document.close();
+  }catch(e){s.textContent="Erreur de chargement. Réessaie."}
+}
+go();
+</script></body></html>
